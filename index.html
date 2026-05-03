@@ -3,98 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>База Данных ОСБ ДПС ГАИ Кузбасс</title>
+    <title>KEMEROVO RP | Система ОСБ ДПС</title>
     <script src="https://tailwindcss.com"></script>
     <style>
-        @import url('https://googleapis.com');
-        body { background: #050505; color: #e5e5e5; font-family: 'Inter', sans-serif; }
-        .mvd-card { background: rgba(15, 15, 15, 0.98); border: 1px solid #222; border-radius: 12px; }
-        .input-mvd { background: #111; border: 1px solid #333; padding: 12px; border-radius: 6px; width: 100%; outline: none; transition: 0.3s; color: white; font-size: 14px; }
-        .input-mvd:focus { border-color: #1d4ed8; background: #161616; }
-        .status-badge { font-size: 10px; font-weight: 900; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; }
-        .waiting { color: #facc15; border: 1px solid #facc15; background: rgba(250, 204, 21, 0.1); }
-        .header-bg { background: linear-gradient(0deg, #050505 0%, rgba(5,5,5,0.4) 100%), url('i.png'); background-size: cover; background-position: center; }
+        body { background-color: #0d0d0d; color: #ffffff; font-family: 'Segoe UI', sans-serif; }
+        .sidebar { background-color: #141414; border: 1px solid #1f1f1f; border-radius: 12px; }
+        .card { background-color: #141414; border: 1px solid #1f1f1f; border-radius: 12px; transition: 0.3s; }
+        .nav-btn { color: #9ca3af; width: 100%; text-align: left; padding: 12px; border-radius: 8px; font-weight: bold; transition: 0.2s; font-size: 14px; }
+        .nav-btn:hover, .nav-btn.active { background: #3b82f6; color: white; }
+        .admin-controls { display: none !important; }
+        body.is-admin .admin-controls { display: flex !important; }
+        input, textarea { background: #0a0a0a !important; border: 1px solid #333 !important; color: white !important; outline: none; }
     </style>
 </head>
-<body>
+<body class="p-4 md:p-10">
 
-    <!-- Навигация -->
-    <nav class="fixed w-full z-50 p-4 flex justify-between items-center bg-black/90 backdrop-blur-md border-b border-white/5">
-        <div class="flex items-center gap-3 font-black uppercase tracking-tighter italic text-sm md:text-base">
-            <img src="https://postimg.cc" class="w-8 h-8">
-            <span>ОСБ <span class="text-blue-600">ДПС</span> ГАИ Кузбасс</span>
-        </div>
-        <div id="authArea">
-            <button onclick="login()" class="bg-[#5865F2] hover:bg-[#4752C4] px-5 py-2 rounded text-[10px] font-black transition-all active:scale-95 uppercase">Вход через Discord</button>
-        </div>
-    </nav>
-
-    <!-- Шапка с твоей обложкой i.png -->
-    <header class="header-bg h-[400px] flex items-center justify-center relative">
-        <div class="text-center z-10 px-4">
-            <h1 class="text-5xl md:text-7xl font-black italic uppercase tracking-tighter text-white drop-shadow-2xl">FORUM <span class="text-blue-700">OSB</span></h1>
-            <p class="text-[10px] text-gray-400 mt-2 tracking-[0.4em] font-bold uppercase">ОСБ ДПС ГАИ ГУ МВД ПО КЕМЕРОВСКОЙ ОБЛАСТИ</p>
+    <header class="max-w-6xl mx-auto flex justify-between items-center mb-10">
+        <h1 class="text-4xl font-black italic uppercase tracking-tighter">Форум</h1>
+        <div id="userBox">
+            <button onclick="login()" class="bg-[#5865F2] px-5 py-2 rounded-lg font-bold flex items-center gap-2 text-sm">
+                <img src="images.jpg" class="w-5 h-5 rounded-full"> Войти
+            </button>
         </div>
     </header>
 
-    <!-- Регистрация IC-данных -->
-    <div id="regModal" class="hidden fixed inset-0 z-[100] bg-black/95 flex items-center justify-center p-4 backdrop-blur-sm">
-        <div class="mvd-card max-w-lg w-full p-8 shadow-2xl border-blue-900/40">
-            <h2 class="text-2xl font-black italic uppercase tracking-tighter mb-1 text-blue-500 text-center">Личное дело сотрудника</h2>
-            <p class="text-[9px] text-gray-500 mb-6 uppercase tracking-widest text-center border-b border-gray-900 pb-4 italic">Внесите IC данные вашего персонажа</p>
-            <form id="regForm" class="space-y-4">
-                <div class="grid grid-cols-2 gap-4">
-                    <input type="text" id="icFirst" placeholder="Имя (IC)" class="input-mvd" required>
-                    <input type="text" id="icLast" placeholder="Фамилия (IC)" class="input-mvd" required>
+    <main class="max-w-6xl mx-auto grid md:grid-cols-12 gap-8">
+        <aside class="md:col-span-3 space-y-4">
+            <div class="sidebar p-5">
+                <h3 class="text-blue-500 font-black uppercase text-[10px] mb-6 tracking-widest italic">KEMEROVO RP</h3>
+                <button onclick="switchTab('news')" id="btn-news" class="nav-btn active">★ Главное</button>
+                <button onclick="protectedAction('forum')" id="btn-forum" class="nav-btn mt-2">🏛 База МВД / ОСБ</button>
+            </div>
+        </aside>
+
+        <section class="md:col-span-9 space-y-6">
+            <div id="tab-news">
+                <div class="card p-8">
+                    <h3 class="text-2xl font-black italic text-blue-600 uppercase mb-4">Система авторизации обновлена</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Доступ к рапортам сотрудников ОСБ осуществляется через синхронизацию с Discord. Авторизуйтесь, чтобы увидеть закрытые разделы.</p>
                 </div>
-                <input type="text" id="icBadge" placeholder="Номер жетона (Напр: 42-01)" class="input-mvd" required>
-                <select id="icRank" class="input-mvd">
-                    <option>Рядовой полиции</option><option>Сержант полиции</option><option>Лейтенант</option><option>Капитан</option><option>Майор</option>
-                </select>
-                <textarea id="icBio" placeholder="ПОЛНАЯ АВТОБИОГРАФИЯ (от 150 символов)..." class="input-mvd h-32" required></textarea>
-                <button type="submit" class="w-full bg-blue-700 py-4 font-black uppercase text-xs tracking-widest rounded hover:bg-blue-600 transition shadow-lg shadow-blue-900/20">Завести дело в базе</button>
+            </div>
+
+            <div id="tab-forum" class="hidden space-y-6">
+                <div class="flex justify-between items-center border-b border-gray-800 pb-6">
+                    <h2 class="text-xl font-black italic uppercase">Реестр спецбатальона</h2>
+                    <button onclick="document.getElementById('postModal').classList.remove('hidden')" class="bg-blue-600 text-white px-6 py-2 rounded text-[10px] font-black uppercase">Подать рапорт</button>
+                </div>
+                <div id="feed" class="space-y-6"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Модалка регистрации -->
+    <div id="regModal" class="hidden fixed inset-0 bg-black/98 z-50 flex items-center justify-center p-6">
+        <div class="sidebar max-w-xl w-full p-10">
+            <h2 class="text-2xl font-black italic uppercase text-blue-600 mb-6">Создать личное дело</h2>
+            <form id="regForm" class="space-y-4">
+                <input type="text" id="rFio" placeholder="ФИО персонажа (RP)" class="w-full p-4 rounded text-sm" required>
+                <div class="grid grid-cols-2 gap-4">
+                    <input type="text" id="rRank" placeholder="Звание" class="w-full p-4 rounded text-sm" required>
+                    <input type="text" id="rPost" placeholder="Должность" class="w-full p-4 rounded text-sm" required>
+                </div>
+                <textarea id="rBio" placeholder="Автобиография..." class="w-full p-4 rounded h-40 text-sm" required></textarea>
+                <button type="submit" class="w-full bg-blue-700 py-4 font-black uppercase text-xs rounded">Внести в реестр</button>
             </form>
         </div>
     </div>
 
-    <!-- Основной контент -->
-    <main id="mainContent" class="hidden container mx-auto px-4 -mt-10 relative z-20 pb-20 grid lg:grid-cols-3 gap-8">
-        <div class="lg:col-span-1">
-            <div class="mvd-card p-6 sticky top-24 shadow-2xl">
-                <div class="flex items-center gap-4 mb-6 border-b border-gray-900 pb-4">
-                    <div id="userAvatar" class="w-12 h-12 bg-blue-900 rounded-full border border-blue-600 overflow-hidden shadow-inner"></div>
-                    <div>
-                        <h3 id="profileName" class="font-black italic text-white uppercase leading-none text-sm tracking-tighter">...</h3>
-                        <p id="profileRank" class="text-blue-500 text-[9px] mt-1 font-bold uppercase tracking-widest"></p>
-                    </div>
-                </div>
-                <h4 class="text-[10px] font-black text-gray-500 uppercase mb-4 tracking-widest">Подать новый рапорт</h4>
-                <form id="appForm" class="space-y-3">
-                    <select id="appType" class="input-mvd text-xs bg-black/50">
-                        <option>Заявление на удостоверение</option>
-                        <option>Рапорт на повышение</option>
-                        <option>Снятие выговора</option>
-                    </select>
-                    <textarea id="appText" placeholder="Опишите суть обращения или прикрепите ссылки..." class="input-mvd h-24 text-xs bg-black/50"></textarea>
-                    <button class="w-full bg-blue-600 text-white py-3 rounded text-[10px] font-black uppercase hover:bg-blue-500 transition shadow-lg shadow-blue-900/20 active:scale-95">Отправить рапорт</button>
-                </form>
-                <div class="mt-4">
-                    <a href="https://github.io" class="block text-center text-[9px] text-gray-600 hover:text-blue-400 underline uppercase tracking-tighter transition">На основной сайт</a>
-                </div>
-            </div>
+    <!-- Модалка рапорта -->
+    <div id="postModal" class="hidden fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-6">
+        <div class="sidebar max-w-lg w-full p-8">
+            <textarea id="pText" placeholder="Суть рапорта..." class="w-full p-4 rounded h-32 text-sm mb-4"></textarea>
+            <button onclick="sendPost()" class="w-full bg-blue-600 py-3 font-black uppercase text-[10px] rounded">Отправить</button>
         </div>
-        <div class="lg:col-span-2">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-sm font-black uppercase text-blue-500 tracking-[0.2em] italic">Архив специальных рапортов</h2>
-                <div class="w-2 h-2 bg-red-600 rounded-full animate-pulse shadow-lg shadow-red-600/50"></div>
-            </div>
-            <div id="feed" class="space-y-4">
-                <div class="text-center py-20 text-gray-800 text-xs font-bold animate-pulse uppercase tracking-[0.5em]">Ожидание сигнала ГУ МВД...</div>
-            </div>
-        </div>
-    </main>
+    </div>
 
-    <!-- Firebase SDK -->
     <script src="https://gstatic.com"></script>
     <script src="https://gstatic.com"></script>
     <script src="https://gstatic.com"></script>
@@ -113,82 +96,127 @@
         const auth = firebase.auth();
 
         let userData = null;
+        const GUILD_ID = "1489059891120443585"; 
+        const ADMIN_ROLES = ["1497015884873728250", "1497020406597423184"]; 
 
         async function login() {
             const provider = new firebase.auth.OAuthProvider('oidc.discord');
-            await auth.signInWithPopup(provider);
+            provider.addScope('guilds');
+            provider.addScope('guilds.members.read');
+            const result = await auth.signInWithPopup(provider);
+            checkRoles(result.credential.accessToken);
+        }
+
+        async function checkRoles(token) {
+            try {
+                const res = await fetch(`https://discord.com{GUILD_ID}/member`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const member = await res.json();
+                if (member.roles && member.roles.some(r => ADMIN_ROLES.includes(r))) {
+                    document.body.classList.add('is-admin');
+                }
+            } catch (e) { console.error(e); }
         }
 
         auth.onAuthStateChanged(async (user) => {
             if (user) {
-                document.getElementById('authArea').innerHTML = `<span class="text-[9px] text-green-500 font-bold uppercase tracking-widest italic flex items-center gap-1"><div class="w-1 h-1 bg-green-500 rounded-full"></div> Онлайн</span>`;
+                document.getElementById('userBox').innerHTML = `<div class="flex items-center gap-3"><img src="${user.photoURL}" class="w-8 h-8 rounded-full border border-blue-600"><span class="text-xs font-bold uppercase italic">${user.displayName}</span></div>`;
                 const doc = await db.collection('users').doc(user.uid).get();
-                if (!doc.exists) {
-                    document.getElementById('regModal').classList.remove('hidden');
-                } else {
-                    userData = doc.data();
-                    showUI(user);
-                }
+                if (!doc.exists) document.getElementById('regModal').classList.remove('hidden');
+                else userData = doc.data();
             }
         });
 
+        function switchTab(t) {
+            document.getElementById('tab-news').classList.add('hidden');
+            document.getElementById('tab-forum').classList.add('hidden');
+            document.getElementById('tab-'+t).classList.remove('hidden');
+            if(t === 'forum') loadFeed();
+        }
+
+        function protectedAction(t) {
+            if(!auth.currentUser) alert("Требуется авторизация!");
+            else switchTab(t);
+        }
+
         document.getElementById('regForm').onsubmit = async (e) => {
             e.preventDefault();
-            const data = {
-                firstName: document.getElementById('icFirst').value,
-                lastName: document.getElementById('icLast').value,
-                badge: document.getElementById('icBadge').value,
-                rank: document.getElementById('icRank').value,
-                bio: document.getElementById('icBio').value
-            };
-            await db.collection('users').doc(auth.currentUser.uid).set(data);
+            await db.collection('users').doc(auth.currentUser.uid).set({
+                fio: document.getElementById('rFio').value,
+                rank: document.getElementById('rRank').value,
+                post: document.getElementById('rPost').value,
+                bio: document.getElementById('rBio').value
+            });
             location.reload();
         };
 
-        function showUI(user) {
-            document.getElementById('mainContent').classList.remove('hidden');
-            document.getElementById('profileName').innerText = `${userData.firstName} ${userData.lastName}`;
-            document.getElementById('profileRank').innerText = `${userData.rank} | ${userData.badge}`;
-            document.getElementById('userAvatar').innerHTML = `<img src="${user.photoURL}" class="w-full h-full object-cover">`;
-        }
-
-        document.getElementById('appForm').onsubmit = async (e) => {
-            e.preventDefault();
+        async function sendPost() {
             await db.collection('applications').add({
-                author: `${userData.firstName} ${userData.lastName}`,
-                badge: userData.badge,
-                type: document.getElementById('appType').value,
-                text: document.getElementById('appText').value,
+                author: userData.fio,
+                rank: userData.rank,
+                text: document.getElementById('pText').value,
                 status: 'waiting',
-                date: new Date().toLocaleString('ru-RU'),
+                date: new Date().toLocaleString(),
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
-            alert("Ваш рапорт передан в базу данных ОСБ!");
-            e.target.reset();
-        };
+            document.getElementById('postModal').classList.add('hidden');
+        }
 
-        db.collection('applications').orderBy('timestamp', 'desc').onSnapshot(snap => {
-            const feed = document.getElementById('feed');
-            feed.innerHTML = '';
-            snap.forEach(doc => {
-                const app = doc.data();
-                feed.innerHTML += `
-                    <div class="mvd-card p-5 border-l-2 ${app.status === 'waiting' ? 'border-yellow-600' : 'border-green-600'}">
-                        <div class="flex justify-between items-start mb-3">
-                            <div>
-                                <span class="status-badge ${app.status === 'waiting' ? 'waiting' : ''}">${app.status === 'waiting' ? 'На рассмотрении' : 'Обработано'}</span>
-                                <h4 class="font-black text-sm uppercase italic mt-2 tracking-tighter">${app.author} <span class="text-[10px] text-gray-600 font-normal">#${app.badge}</span></h4>
-                                <p class="text-blue-500 text-[10px] font-bold uppercase tracking-widest mt-1">${app.type}</p>
+        function loadFeed() {
+            db.collection('applications').orderBy('timestamp', 'desc').onSnapshot(snap => {
+                const feed = document.getElementById('feed');
+                feed.innerHTML = '';
+                snap.forEach(doc => {
+                    const post = doc.data();
+                    const id = doc.id;
+                    feed.innerHTML += `
+                        <div class="card p-6 border-l-4 ${post.status === 'waiting' ? 'border-yellow-600' : 'border-green-600'}">
+                            <div class="flex justify-between mb-4">
+                                <span class="text-blue-500 font-black uppercase text-[10px] tracking-widest">${post.author} [${post.rank}]</span>
+                                <span class="text-[9px] text-gray-700">${post.date}</span>
                             </div>
-                            <span class="text-[9px] text-gray-700">${app.date}</span>
-                        </div>
-                        <div class="p-3 bg-black/40 rounded text-xs text-gray-400 italic font-light border border-white/5">
-                            "${app.text}"
-                        </div>
-                    </div>
-                `;
+                            <p class="text-gray-400 text-sm mb-6">"${post.text}"</p>
+                            <div class="admin-controls gap-2 mb-6">
+                                <button onclick="setStatus('${id}', 'accepted')" class="bg-green-900/20 text-green-500 border border-green-900 px-4 py-1 rounded text-[9px] font-bold">ОДОБРИТЬ</button>
+                                <button onclick="setStatus('${id}', 'denied')" class="bg-red-900/20 text-red-500 border border-red-900 px-4 py-1 rounded text-[9px] font-bold">ОТКАЗАТЬ</button>
+                            </div>
+                            <div class="bg-black/30 p-4 rounded-lg">
+                                <div id="comments-${id}" class="space-y-2 mb-4"></div>
+                                <div class="flex gap-2">
+                                    <input type="text" id="in-${id}" placeholder="Ответить..." class="flex-1 p-2 text-xs rounded bg-black">
+                                    <button onclick="addComment('${id}')" class="bg-blue-600 px-4 rounded text-[9px] font-black">ОТВЕТ</button>
+                                </div>
+                            </div>
+                        </div>`;
+                    loadComments(id);
+                });
             });
-        });
+        }
+
+        async function setStatus(id, s) { await db.collection('applications').doc(id).update({ status: s }); }
+
+        async function addComment(id) {
+            const val = document.getElementById('in-'+id).value;
+            if(!val) return;
+            await db.collection('applications').doc(id).collection('comments').add({
+                user: userData.fio, text: val, timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            document.getElementById('in-'+id).value = '';
+        }
+
+        function loadComments(id) {
+            db.collection('applications').doc(id).collection('comments').orderBy('timestamp', 'asc').onSnapshot(snap => {
+                const box = document.getElementById('comments-'+id);
+                box.innerHTML = '';
+                snap.forEach(c => {
+                    const d = c.data();
+                    box.innerHTML += `<div class="text-[11px] border-l border-blue-900 pl-3">
+                        <span class="text-blue-500 font-bold uppercase">${d.user}:</span> <span class="text-gray-400">${d.text}</span>
+                    </div>`;
+                });
+            });
+        }
     </script>
 </body>
 </html>
