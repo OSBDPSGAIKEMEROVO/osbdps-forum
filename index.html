@@ -3,136 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KEMEROVO RP | ФОРУМ ОСБ</title>
+    <title>KEMEROVO RP | ОСБ ДПС</title>
     <style>
-        /* ОСНОВНЫЕ СТИЛИ */
-        body { background: #0a0a0a; color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; }
-        .container { max-width: 1100px; margin: 0 auto; }
+        body { background: #0a0a0a; color: #fff; font-family: sans-serif; margin: 0; padding: 0; }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; border-bottom: 1px solid #222; }
+        .nav { display: flex; gap: 20px; }
+        .nav a, .nav button { color: #888; text-decoration: none; background: none; border: none; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 12px; }
+        .nav a:hover, .nav button:hover { color: #fff; }
         
-        /* ХЕДЕР */
-        header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222; padding-bottom: 20px; margin-bottom: 30px; }
-        .logo { font-size: 32px; font-weight: 900; font-style: italic; text-transform: uppercase; letter-spacing: -2px; }
-        .nav-top { display: flex; gap: 20px; margin-left: 40px; }
-        .nav-top a, .nav-top button { background: none; border: none; color: #666; font-weight: bold; text-transform: uppercase; font-size: 12px; cursor: pointer; text-decoration: none; }
-        .nav-top a:hover { color: #fff; }
-
-        /* КНОПКА DISCORD */
-        .btn-discord { background: #5865F2; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: 0.2s; }
-        .btn-discord:hover { background: #4752C4; transform: scale(1.02); }
-        .btn-discord img { width: 20px; height: 20px; border-radius: 4px; }
-
-        /* СЕТКА */
-        .main-grid { display: grid; grid-template-columns: 280px 1fr; gap: 30px; }
-        @media (max-width: 768px) { .main-grid { grid-template-columns: 1fr; } }
-
-        /* САЙДБАР */
-        .sidebar { background: #111; border: 1px solid #222; border-radius: 12px; padding: 20px; }
-        .sidebar h3 { font-size: 10px; color: #3b82f6; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; }
-        .nav-btn { width: 100%; text-align: left; background: #1a1a1a; border: 1px solid #333; color: #888; padding: 12px; border-radius: 8px; margin-bottom: 10px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        .nav-btn.active { background: #3b82f6; color: #fff; border-color: #3b82f6; }
-
-        /* КАРТОЧКИ */
-        .card { background: #111; border: 1px solid #222; border-radius: 12px; padding: 30px; margin-bottom: 20px; }
+        .btn-ds { background: #5865F2; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        
+        .wrapper { display: grid; grid-template-columns: 250px 1fr; gap: 30px; padding: 30px 5%; }
+        @media (max-width: 768px) { .wrapper { grid-template-columns: 1fr; } }
+        
+        .sidebar { background: #111; border: 1px solid #222; border-radius: 10px; padding: 20px; height: fit-content; }
+        .side-btn { width: 100%; text-align: left; padding: 12px; background: #1a1a1a; border: 1px solid #333; color: #888; border-radius: 8px; margin-bottom: 10px; cursor: pointer; font-weight: bold; }
+        .side-btn.active { background: #3b82f6; color: #fff; border-color: #3b82f6; }
+        
+        .card { background: #111; border: 1px solid #222; border-radius: 10px; padding: 25px; margin-bottom: 20px; }
         .card h2 { color: #3b82f6; text-transform: uppercase; font-style: italic; margin-top: 0; }
-        .card p { color: #aaa; line-height: 1.6; font-size: 14px; }
-
-        /* СКРЫТЫЕ ЭЛЕМЕНТЫ */
-        .hidden { display: none !important; }
-        .admin-only { display: none; }
-        body.is-admin .admin-only { display: block; }
-
-        /* ФОРМЫ */
-        input, textarea, select { width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 6px; margin-bottom: 15px; box-sizing: border-box; }
-        .btn-send { background: #3b82f6; color: #fff; border: none; padding: 12px; border-radius: 6px; font-weight: bold; width: 100%; cursor: pointer; text-transform: uppercase; }
         
-        /* ПОСТЫ */
-        .post { border-left: 4px solid #facc15; padding-left: 20px; }
-        .post.accepted { border-left-color: #22c55e; }
-        .post-header { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 10px; }
-        .post-author { color: #3b82f6; font-weight: bold; text-transform: uppercase; }
+        .hidden { display: none !important; }
+        
+        input, textarea, select { width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 5px; margin-bottom: 10px; box-sizing: border-box; }
+        .btn-blue { background: #3b82f6; color: #fff; border: none; padding: 12px; border-radius: 5px; width: 100%; cursor: pointer; font-weight: bold; text-transform: uppercase; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <header>
-            <div style="display: flex; align-items: center;">
-                <div class="logo">Форум</div>
-                <div class="nav-top">
-                    <button onclick="switchTab('news')" style="color: #fff;">Новости</button>
-                    <a href="https://github.io">Основной сайт</a>
-                </div>
+    <header class="header">
+        <div style="display: flex; align-items: center; gap: 30px;">
+            <div style="font-size: 24px; font-weight: 900; italic; text-transform: uppercase;">Форум</div>
+            <div class="nav">
+                <button onclick="showTab('news')" style="color:#fff">Новости</button>
+                <a href="https://github.io">Основной сайт</a>
             </div>
-            <div id="userBox">
-                <button onclick="login()" class="btn-discord">
-                    <img src="images.jpg"> Войти через Discord
-                </button>
-            </div>
-        </header>
-
-        <div class="main-grid">
-            <aside>
-                <div class="sidebar">
-                    <h3>Kemerovo Roleplay</h3>
-                    <button onclick="switchTab('news')" id="btn-news" class="nav-btn active">★ Новости</button>
-                    <button onclick="protectedAction('forum')" id="btn-forum" class="nav-btn">🏛 База МВД / ОСБ</button>
-                </div>
-            </aside>
-
-            <section>
-                <!-- ВКЛАДКА НОВОСТИ -->
-                <div id="tab-news">
-                    <div class="card">
-                        <h2>Портал запущен</h2>
-                        <p>Добро пожаловать. Для просмотра рапортов и заполнения личного дела авторизуйтесь через Discord. После входа вам станет доступна вкладка "База МВД".</p>
-                    </div>
-                </div>
-
-                <!-- ВКЛАДКА ФОРУМ -->
-                <div id="tab-forum" class="hidden">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h2 style="margin: 0;">Архив ГУ МВД</h2>
-                        <button onclick="document.getElementById('postModal').classList.remove('hidden')" class="btn-send" style="width: auto; padding: 8px 20px;">Подать рапорт</button>
-                    </div>
-                    <div id="feed">
-                        <p style="text-align: center; color: #444;">Загрузка архива дел...</p>
-                    </div>
-                </div>
-            </section>
         </div>
+        <div id="authBox">
+            <button onclick="login()" class="btn-ds"><img src="images.jpg" style="width:20px; border-radius:3px;"> Войти</button>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <aside>
+            <div class="sidebar">
+                <div style="font-size: 10px; color: #3b82f6; font-weight: bold; margin-bottom: 15px; letter-spacing: 2px;">KEMEROVO ROLEPLAY</div>
+                <button onclick="showTab('news')" id="b-news" class="side-btn active">НОВОСТИ</button>
+                <button onclick="protectedTab()" id="b-forum" class="side-btn">БАЗА МВД / ОСБ</button>
+            </div>
+        </aside>
+
+        <main>
+            <div id="tab-news">
+                <div class="card">
+                    <h2>Инфо-блок</h2>
+                    <p>Добро пожаловать. Для доступа к закрытым рапортам и анкетам авторизуйтесь через Discord.</p>
+                </div>
+            </div>
+
+            <div id="tab-forum" class="hidden">
+                <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 style="margin:0">Архив ГУ МВД</h2>
+                    <button onclick="document.getElementById('m-post').classList.remove('hidden')" class="btn-blue" style="width:auto; padding: 8px 20px;">Подать рапорт</button>
+                </div>
+                <div id="feed"><p style="color:#444; text-align:center">Загрузка данных...</p></div>
+            </div>
+        </main>
     </div>
 
-    <!-- МОДАЛКА РЕГИСТРАЦИИ -->
-    <div id="regModal" class="hidden" style="position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 100; display: flex; align-items: center; justify-center; padding: 20px;">
-        <div class="sidebar" style="max-width: 500px; margin: auto;">
-            <h2 style="color: #3b82f6; text-transform: uppercase;">Личное дело</h2>
-            <p style="font-size: 10px; color: #666; text-transform: uppercase; margin-bottom: 20px;">Введите данные вашего персонажа</p>
-            <form id="regForm">
-                <input type="text" id="rFio" placeholder="ФИО (RP)" required>
-                <input type="text" id="rRank" placeholder="Звание" required>
-                <input type="text" id="rPost" placeholder="Должность" required>
-                <textarea id="rBio" placeholder="Автобиография..." style="height: 150px;" required></textarea>
-                <button type="submit" class="btn-send">Создать личное дело</button>
+    <!-- Модалка регистрации -->
+    <div id="m-reg" class="hidden" style="position:fixed; inset:0; background:rgba(0,0,0,0.95); display:flex; align-items:center; justify-content:center; z-index:1000;">
+        <div class="sidebar" style="width:400px;">
+            <h2 style="color:#3b82f6">ЛИЧНОЕ ДЕЛО</h2>
+            <form id="f-reg">
+                <input type="text" id="i-fio" placeholder="ФИО (RP)" required>
+                <input type="text" id="i-rank" placeholder="Звание" required>
+                <input type="text" id="i-post" placeholder="Должность" required>
+                <textarea id="i-bio" placeholder="Автобиография..." style="height:100px" required></textarea>
+                <button type="submit" class="btn-blue">Зарегистрировать</button>
             </form>
         </div>
     </div>
 
-    <!-- МОДАЛКА ПОСТА -->
-    <div id="postModal" class="hidden" style="position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 100; display: flex; align-items: center; justify-center; padding: 20px;">
-        <div class="sidebar" style="max-width: 500px; margin: auto; position: relative;">
-            <button onclick="document.getElementById('postModal').classList.add('hidden')" style="position: absolute; right: 20px; top: 20px; background: none; border: none; color: #fff; cursor: pointer;">✕</button>
-            <h2 style="color: #3b82f6;">Новый рапорт</h2>
-            <select id="pType">
+    <!-- Модалка рапорта -->
+    <div id="m-post" class="hidden" style="position:fixed; inset:0; background:rgba(0,0,0,0.9); display:flex; align-items:center; justify-content:center; z-index:1000;">
+        <div class="sidebar" style="width:400px; position:relative;">
+            <button onclick="document.getElementById('m-post').classList.add('hidden')" style="position:absolute; right:15px; top:15px; color:#fff; background:none; border:none; cursor:pointer;">✕</button>
+            <h2 style="color:#3b82f6">НОВЫЙ РАПОРТ</h2>
+            <select id="i-type">
                 <option>Заявление на удостоверение</option>
                 <option>Отчет на повышение</option>
-                <option>Снятие выговора</option>
             </select>
-            <textarea id="pText" placeholder="Суть обращения..." style="height: 100px;"></textarea>
-            <button onclick="sendPost()" class="btn-send">Отправить в базу</button>
+            <textarea id="i-text" placeholder="Суть..." style="height:100px"></textarea>
+            <button onclick="send()" class="btn-blue">Отправить</button>
         </div>
     </div>
 
-    <!-- FIREBASE -->
     <script src="https://gstatic.com"></script>
     <script src="https://gstatic.com"></script>
     <script src="https://gstatic.com"></script>
@@ -149,123 +115,74 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
         const auth = firebase.auth();
-
-        let userData = null;
-        const MY_GUILD = "1489059891120443585";
-        const ADMIN_ROLES = ["1497015884873728250", "1497020406597423184"];
+        let userProfile = null;
 
         async function login() {
             const provider = new firebase.auth.OAuthProvider('oidc.discord');
-            provider.addScope('guilds');
-            provider.addScope('guilds.members.read');
-            try {
-                await auth.signInWithPopup(provider);
-            } catch (e) { alert("Ошибка: " + e.message); }
+            await auth.signInWithPopup(provider).catch(e => alert("Ошибка: " + e.message));
         }
 
         auth.onAuthStateChanged(async (user) => {
             if (user) {
-                document.getElementById('userBox').innerHTML = `<div style="display:flex; align-items:center; gap:10px; font-size:12px; font-weight:bold;"><img src="${user.photoURL}" style="width:30px; border-radius:50%; border:1px solid #3b82f6;"> ${user.displayName}</div>`;
+                document.getElementById('authBox').innerHTML = `<div style="display:flex; align-items:center; gap:10px;"><img src="${user.photoURL}" style="width:30px; border-radius:50%; border:1px solid #3b82f6;"> ${user.displayName}</div>`;
                 const doc = await db.collection('users').doc(user.uid).get();
-                if (!doc.exists) {
-                    document.getElementById('regModal').classList.remove('hidden');
-                    document.getElementById('regModal').style.display = 'flex';
-                } else {
-                    userData = doc.data();
-                }
+                if (!doc.exists) { document.getElementById('m-reg').classList.remove('hidden'); }
+                else { userProfile = doc.data(); }
             }
         });
 
-        function switchTab(tab) {
+        function showTab(t) {
             document.getElementById('tab-news').classList.add('hidden');
             document.getElementById('tab-forum').classList.add('hidden');
-            document.getElementById('btn-news').classList.remove('active');
-            document.getElementById('btn-forum').classList.remove('active');
-            
-            document.getElementById('tab-' + tab).classList.remove('hidden');
-            document.getElementById('btn-' + tab).classList.add('active');
-            if (tab === 'forum') loadFeed();
+            document.getElementById('b-news').classList.remove('active');
+            document.getElementById('b-forum').classList.remove('active');
+            document.getElementById('tab-'+t).classList.remove('hidden');
+            document.getElementById('b-'+t).classList.add('active');
+            if(t === 'forum') load();
         }
 
-        function protectedAction(tab) {
-            if (!auth.currentUser) { alert("Сначала авторизуйтесь через Discord!"); }
-            else { switchTab(tab); }
+        function protectedTab() {
+            if(!auth.currentUser) alert("Сначала войдите в Discord!");
+            else showTab('forum');
         }
 
-        document.getElementById('regForm').onsubmit = async (e) => {
+        document.getElementById('f-reg').onsubmit = async (e) => {
             e.preventDefault();
             await db.collection('users').doc(auth.currentUser.uid).set({
-                fio: document.getElementById('rFio').value,
-                rank: document.getElementById('rRank').value,
-                post: document.getElementById('rPost').value,
-                bio: document.getElementById('rBio').value
+                fio: document.getElementById('i-fio').value,
+                rank: document.getElementById('i-rank').value,
+                post: document.getElementById('i-post').value,
+                bio: document.getElementById('i-bio').value
             });
             location.reload();
         };
 
-        async function sendPost() {
-            const txt = document.getElementById('pText').value;
-            if(!txt) return;
+        async function send() {
             await db.collection('applications').add({
-                author: userData.fio,
-                rank: userData.rank,
-                type: document.getElementById('pType').value,
-                text: txt,
-                status: 'waiting',
-                date: new Date().toLocaleString(),
+                author: userProfile.fio, rank: userProfile.rank,
+                text: document.getElementById('i-text').value,
+                type: document.getElementById('i-type').value,
+                status: 'waiting', date: new Date().toLocaleString(),
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
-            document.getElementById('postModal').classList.add('hidden');
-            document.getElementById('pText').value = '';
+            document.getElementById('m-post').classList.add('hidden');
         }
 
-        function loadFeed() {
+        function load() {
             db.collection('applications').orderBy('timestamp', 'desc').onSnapshot(snap => {
                 const feed = document.getElementById('feed');
                 feed.innerHTML = '';
                 snap.forEach(doc => {
-                    const post = doc.data();
-                    const id = doc.id;
+                    const d = doc.data();
                     feed.innerHTML += `
-                        <div class="card post ${post.status === 'accepted' ? 'accepted' : ''}">
-                            <div class="post-header">
-                                <span class="post-author">${post.author} [${post.rank}]</span>
-                                <span style="color:#444">${post.date}</span>
+                        <div class="card" style="border-left:4px solid ${d.status === 'waiting' ? '#facc15' : '#22c55e'}">
+                            <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:10px;">
+                                <span style="color:#3b82f6; font-weight:bold;">${d.author} [${d.rank}]</span>
+                                <span style="color:#444">${d.date}</span>
                             </div>
-                            <div style="font-size:10px; color:#3b82f6; font-weight:bold; margin-bottom:10px; text-transform:uppercase;">${post.type}</div>
-                            <p style="font-style:italic; color:#888;">"${post.text}"</p>
-                            
-                            <div style="margin-top:20px; border-top:1px solid #222; padding-top:15px;">
-                                <div id="comments-${id}"></div>
-                                <div style="display:flex; gap:10px; margin-top:10px;">
-                                    <input type="text" id="in-${id}" placeholder="Ответить..." style="margin-bottom:0; font-size:12px;">
-                                    <button onclick="addComment('${id}')" class="btn-send" style="width:auto; font-size:10px; padding:0 15px;">Ответ</button>
-                                </div>
-                            </div>
+                            <div style="font-size:10px; font-weight:bold; color:#3b82f6; text-transform:uppercase;">${d.type}</div>
+                            <p style="font-style:italic; color:#888; margin-top:10px;">"${d.text}"</p>
                         </div>`;
-                    loadComments(id);
-                });
-            });
-        }
-
-        async function addComment(id) {
-            const val = document.getElementById('in-'+id).value;
-            if(!val) return;
-            await db.collection('applications').doc(id).collection('comments').add({
-                user: userData.fio, text: val, timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            });
-            document.getElementById('in-'+id).value = '';
-        }
-
-        function loadComments(id) {
-            db.collection('applications').doc(id).collection('comments').orderBy('timestamp', 'asc').onSnapshot(snap => {
-                const box = document.getElementById('comments-'+id);
-                box.innerHTML = '';
-                snap.forEach(c => {
-                    const d = c.data();
-                    box.innerHTML += `<div style="font-size:11px; margin-bottom:5px; border-left:1px solid #3b82f6; padding-left:10px;">
-                        <span style="color:#3b82f6; font-weight:bold;">${d.user}:</span> <span style="color:#666;">${d.text}</span>
-                    </div>`;
                 });
             });
         }
