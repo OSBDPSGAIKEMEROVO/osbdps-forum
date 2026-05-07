@@ -16,7 +16,7 @@
         header { 
             width: 100%; height: 280px; 
             background: url('i.png') no-repeat center center; background-size: cover; 
-            border-bottom: 2px solid var(--blue); box-shadow: 0 0 15px rgba(0, 123, 255, 0.4);
+            border-bottom: 3px solid var(--blue); box-shadow: 0 0-15px rgba(0, 123, 255, 0.4);
         }
 
         .container { max-width: 800px; margin: -30px auto 50px; padding: 0 20px; }
@@ -36,18 +36,17 @@
         }
         input:focus { border-color: var(--blue); box-shadow: 0 0 5px var(--blue); }
         
-        /* СТАТУСЫ */
         .status-box { font-size: 45px; font-weight: 900; text-transform: uppercase; letter-spacing: 5px; margin: 30px 0; }
         .st-pending { color: #ffffff; text-shadow: 0 0 10px #fff; }
         .st-review { color: #ffff00; text-shadow: 0 0 10px #ffff00; }
         .st-approved { color: #00ff00; text-shadow: 0 0 10px #00ff00; }
         .st-rejected { color: #ff0000; text-shadow: 0 0 10px #ff0000; }
 
-        #auth-view, #reg-view, #status-view, #forum-view, #admin-view { display: none; text-align: center; }
+        #auth-view, #reg-view, #status-view, #forum-view { display: none; text-align: center; }
         .active { display: block !important; }
 
-        .forum-item { border-bottom: 1px solid #222; padding: 15px; display: flex; align-items: center; text-align: left; }
-        .forum-item:hover { background: #181d26; }
+        .forum-item { border-bottom: 1px solid #222; padding: 20px; display: flex; align-items: center; text-align: left; transition: 0.2s; cursor: pointer; }
+        .forum-item:hover { background: #181d26; border-left: 3px solid var(--blue); }
     </style>
 </head>
 <body>
@@ -55,49 +54,52 @@
 <header></header>
 
 <div class="container">
-    <!-- СТРАНИЦА ВХОДА -->
+    <!-- ВХОД -->
     <div id="auth-view" class="card active">
-        <h2 style="color: #fff; letter-spacing: 1px;">АВТОРИЗАЦИЯ ОСБ</h2>
-        <p style="margin-bottom: 30px; color: #666;">Введите учетные данные для доступа к форуму</p>
+        <h2 style="color: #fff;">АВТОРИЗАЦИЯ ОСБ</h2>
         <input type="email" id="login-email" placeholder="Email"><br>
         <input type="password" id="login-pass" placeholder="Пароль"><br>
-        <button class="btn" onclick="login()">Войти в систему</button><br>
-        <button class="btn-text" onclick="showView('reg-view')">Нет аккаунта? Подать рапорт на вступление</button>
+        <button class="btn" onclick="login()">Войти</button><br>
+        <button class="btn-text" onclick="showView('reg-view')">Подать рапорт на вступление</button>
     </div>
 
-    <!-- СТРАНИЦА РЕГИСТРАЦИИ (АНКЕТА) -->
+    <!-- РЕГИСТРАЦИЯ (РАСШИРЕННАЯ АНКЕТА) -->
     <div id="reg-view" class="card">
-        <h2 style="color: #fff;">РАПОРТ НА ВСТУПЛЕНИЕ</h2>
-        <p style="margin-bottom: 30px; color: #666;">Заполните анкету для получения доступа</p>
-        <input type="text" id="reg-name" placeholder="ФИО"><br>
+        <h2 style="color: #fff;">АНКЕТА СОТРУДНИКА</h2>
+        <input type="text" id="reg-name" placeholder="ФИО (Пример: Русаков А.Ш.)"><br>
+        <input type="text" id="reg-rank" placeholder="Звание (Пример: Майор)"><br>
+        <input type="text" id="reg-post" placeholder="Должность (Пример: Начальник ОСБ)"><br>
         <input type="text" id="reg-callsign" placeholder="Позывной (если есть)"><br>
-        <input type="email" id="reg-email" placeholder="Email"><br>
-        <input type="password" id="reg-pass" placeholder="Придумайте пароль"><br>
+        <div style="border-top: 1px solid #333; margin: 10px 0; padding-top: 15px;"></div>
+        <input type="email" id="reg-email" placeholder="Email (для входа)"><br>
+        <input type="password" id="reg-pass" placeholder="Пароль"><br>
         <button class="btn" onclick="register()">Отправить рапорт</button><br>
-        <button class="btn-text" onclick="showView('auth-view')">Вернуться к авторизации</button>
+        <button class="btn-text" onclick="showView('auth-view')">Назад</button>
     </div>
 
-    <!-- СТРАНИЦА СТАТУСА -->
+    <!-- СТАТУС -->
     <div id="status-view" class="card">
-        <h2 style="color: #666; font-size: 18px;">СТАТУС ВАШЕГО РАПОРТА:</h2>
+        <h2 style="color: #666; font-size: 18px;">ТЕКУЩИЙ СТАТУС:</h2>
         <div id="status-text" class="status-box">ЗАГРУЗКА...</div>
-        <p id="status-desc" style="color: #555; line-height: 1.6;"></p>
-        <button class="btn" onclick="logout()" style="margin-top: 20px;">Выйти из системы</button>
+        <p id="status-desc" style="color: #555;"></p>
+        <button class="btn" onclick="logout()" style="margin-top: 20px;">Выйти</button>
     </div>
 
-    <!-- ГЛАВНЫЙ ФОРУМ -->
+    <!-- ФОРУМ -->
     <div id="forum-view">
         <div class="card" style="display: flex; justify-content: space-between; align-items: center; padding: 15px 25px;">
-            <h3 id="user-display" style="margin: 0; color: #fff;">Сотрудник ОСБ</h3>
-            <div>
-                <button id="admin-btn" class="btn" style="display:none; border-color: #f00; color: #f00; padding: 5px 15px; margin-right: 10px;" onclick="showAdmin()">АДМИНКА</button>
-                <button class="btn" onclick="logout()" style="padding: 5px 15px;">Выйти</button>
+            <div style="text-align: left;">
+                <div id="user-rank-post" style="color: var(--blue); font-size: 12px; font-weight: bold; text-transform: uppercase;">Загрузка...</div>
+                <h3 id="user-display" style="margin: 0; color: #fff;">Сотрудник ОСБ</h3>
             </div>
+            <button class="btn" onclick="logout()" style="padding: 5px 15px; width: auto;">Выйти</button>
         </div>
-        <div class="card">
-            <h2 style="color: var(--blue); text-align: left; border-bottom: 1px solid var(--blue); padding-bottom: 10px;">БАЗА ДАННЫХ</h2>
+
+        <div class="card" style="padding: 0; overflow: hidden;">
+            <div style="background: #1a1f26; padding: 15px 20px; color: var(--blue); font-weight: bold; border-bottom: 1px solid var(--blue);">ИНФОРМАЦИОННЫЙ РАЗДЕЛ</div>
             <div class="forum-item">📜 <div><b style="color:#fff; display:block;">Канцелярия</b><span style="color:#555; font-size:13px;">Приказы, распоряжения и выговоры.</span></div></div>
             <div class="forum-item">👮 <div><b style="color:#fff; display:block;">Личный состав</b><span style="color:#555; font-size:13px;">Рапорты на повышение и списки сотрудников.</span></div></div>
+            <div class="forum-item">📟 <div><b style="color:#fff; display:block;">Дежурная часть</b><span style="color:#555; font-size:13px;">Оперативные сводки и ориентировки.</span></div></div>
         </div>
     </div>
 </div>
@@ -126,8 +128,8 @@
             if (!doc.exists) return;
             const data = doc.data();
             if (data.status === 'approved') {
-                document.getElementById('user-display').innerText = `Сотрудник: ${data.name} [${data.callsign || 'БЕЗ ПОЗЫВНОГО'}]`;
-                if (data.role === 'admin') document.getElementById('admin-btn').style.display = 'inline-block';
+                document.getElementById('user-rank-post').innerText = `${data.rank || 'Сотрудник'} | ${data.post || 'ОСБ'}`;
+                document.getElementById('user-display').innerText = `${data.name} [${data.callsign || 'НЕТ'}]`;
                 showView('forum-view');
             } else {
                 updateStatusUI(data.status);
@@ -140,35 +142,35 @@
         const s = document.getElementById('status-text');
         const d = document.getElementById('status-desc');
         s.className = 'status-box';
-        if (status === 'pending') { s.innerText = 'ОЖИДАНИЕ'; s.classList.add('st-pending'); d.innerText = 'Ваш рапорт успешно отправлен и ожидает очереди на рассмотрение.'; }
-        else if (status === 'review') { s.innerText = 'НА ПРОВЕРКЕ'; s.classList.add('st-review'); d.innerText = 'Майор Русаков или Капитан Солониченко приступили к проверке ваших данных.'; }
-        else if (status === 'rejected') { s.innerText = 'ОТКАЗАНО'; s.classList.add('st-rejected'); d.innerText = 'К сожалению, ваш рапорт на вступление был отклонен руководством.'; }
+        if (status === 'pending') { s.innerText = 'ОЖИДАНИЕ'; s.classList.add('st-pending'); d.innerText = 'Ваш рапорт находится в очереди на рассмотрение.'; }
+        else if (status === 'review') { s.innerText = 'НА ПРОВЕРКЕ'; s.classList.add('st-review'); d.innerText = 'Руководство батальона изучает ваши личные данные.'; }
+        else if (status === 'rejected') { s.innerText = 'ОТКАЗАНО'; s.classList.add('st-rejected'); d.innerText = 'Ваш рапорт на вступление был отклонен.'; }
     }
 
     function showView(id) {
-        document.getElementById('auth-view').classList.remove('active');
-        document.getElementById('reg-view').classList.remove('active');
-        document.getElementById('status-view').classList.remove('active');
-        document.getElementById('forum-view').classList.remove('active');
+        document.querySelectorAll('.container > div').forEach(v => v.classList.remove('active'));
         document.getElementById(id).classList.add('active');
     }
 
     function register() {
         const n = document.getElementById('reg-name').value;
+        const r = document.getElementById('reg-rank').value;
+        const o = document.getElementById('reg-post').value;
         const c = document.getElementById('reg-callsign').value;
         const e = document.getElementById('reg-email').value;
         const p = document.getElementById('reg-pass').value;
-        if (!n || !e || !p) return alert("Заполните обязательные поля!");
+
+        if (!n || !r || !o || !e || !p) return alert("Заполните все обязательные поля!");
 
         auth.createUserWithEmailAndPassword(e, p).then(res => {
             db.collection('users').doc(res.user.uid).set({
-                name: n, callsign: c, email: e, status: 'pending', role: 'user'
+                name: n, rank: r, post: o, callsign: c, email: e, status: 'pending', role: 'user'
             });
         }).catch(err => alert(err.message));
     }
 
     function login() {
-        auth.signInWithEmailAndPassword(document.getElementById('login-email').value, document.getElementById('login-pass').value).catch(err => alert("Ошибка входа!"));
+        auth.signInWithEmailAndPassword(document.getElementById('login-email').value, document.getElementById('login-pass').value).catch(err => alert("Ошибка доступа!"));
     }
     function logout() { auth.signOut().then(() => location.reload()); }
 </script>
