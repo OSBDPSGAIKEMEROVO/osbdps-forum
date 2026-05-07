@@ -19,7 +19,7 @@
         .btn { background: transparent; border: 1px solid var(--blue); color: var(--blue); padding: 10px 20px; cursor: pointer; text-transform: uppercase; font-weight: bold; border-radius: 4px; transition: 0.3s; }
         .btn:hover { background: var(--blue); color: #fff; box-shadow: 0 0 15px var(--blue); }
         
-        input, textarea { background: #000; border: 1px solid #333; color: #fff; padding: 12px; margin-bottom: 10px; width: 100%; border-radius: 4px; box-sizing: border-box; }
+        input, textarea { background: #000; border: 1px solid #333; color: #fff; padding: 12px; margin-bottom: 10px; width: 100%; border-radius: 4px; box-sizing: border-box; font-family: inherit; }
         
         .status-box { font-size: 35px; font-weight: 900; text-transform: uppercase; margin: 20px 0; }
         .post { background: #1a1f26; border-left: 4px solid var(--blue); padding: 15px; margin-bottom: 15px; border-radius: 0 4px 4px 0; text-align: left; }
@@ -50,7 +50,6 @@
         <input type="text" id="r-name" placeholder="ФИО (Пример: Иванов Иван Иванович)">
         <input type="text" id="r-rank" placeholder="Звание (Пример: Рядовой)">
         <input type="text" id="r-post" placeholder="Должность (Пример: Инспектор)">
-        <input type="text" id="r-call" placeholder="Позывной (если есть)">
         <div style="border-top: 1px solid #333; margin: 15px 0; padding-top: 15px;"></div>
         <input type="email" id="r-email" placeholder="Email">
         <input type="password" id="r-pass" placeholder="Пароль">
@@ -77,8 +76,8 @@
         </div>
         <div class="card" style="padding: 0; overflow: hidden;">
             <div style="background: #1a1f26; padding: 10px 20px; color: var(--blue); font-weight: bold;">РАБОЧИЕ РАЗДЕЛЫ</div>
-            <div class="forum-link" onclick="openRaports()">📈 <div><b style="color:#fff; display:block;">Рапорты на повышение</b><span style="color:#555; font-size:12px;">Подача и просмотр отчетов о работе.</span></div></div>
-            <div class="forum-link">📜 <div><b style="color:#fff; display:block;">Канцелярия</b><span style="color:#555; font-size:12px;">Приказы и выговоры (Только чтение).</span></div></div>
+            <div class="forum-link" onclick="openRaports()">📈 <div><b style="color:#fff; display:block;">Рапорты на повышение</b><span style="color:#555; font-size:12px;">Подача отчетов о проделанной работе.</span></div></div>
+            <div class="forum-link">📜 <div><b style="color:#fff; display:block;">Канцелярия</b><span style="color:#555; font-size:12px;">Приказы и распоряжения руководства.</span></div></div>
         </div>
     </div>
 
@@ -118,14 +117,16 @@
                 showPage('status-v');
             } else {
                 db.collection('users').doc(user.uid).onSnapshot(doc => {
-                    userData = doc.data();
-                    if (userData && userData.status === 'approved') {
-                        document.getElementById('u-info').innerText = `${userData.rank} | ${userData.post}`;
-                        document.getElementById('u-display').innerText = `${userData.name} [${userData.callsign || 'НЕТ'}]`;
-                        showPage('main-v');
-                    } else if (userData) {
-                        updateUI(userData.status);
-                        showPage('status-v');
+                    if (doc.exists) {
+                        userData = doc.data();
+                        if (userData.status === 'approved') {
+                            document.getElementById('u-info').innerText = `${userData.rank} | ${userData.post}`;
+                            document.getElementById('u-display').innerText = userData.name;
+                            showPage('main-v');
+                        } else {
+                            updateUI(userData.status);
+                            showPage('status-v');
+                        }
                     }
                 });
             }
@@ -136,16 +137,15 @@
         const t = document.getElementById('st-text');
         const d = document.getElementById('st-desc');
         t.className = 'status-box';
-        if (status === 'verify') { t.innerText = 'ПОДТВЕРДИТЕ EMAIL'; t.style.color = '#fff'; d.innerText = 'Проверьте почту и перейдите по ссылке для активации.'; }
-        else if (status === 'pending') { t.innerText = 'ОЖИДАНИЕ'; t.style.color = '#fff'; d.innerText = 'Ваш рапорт на вступление ожидает очереди.'; }
-        else if (status === 'review') { t.innerText = 'НА ПРОВЕРКЕ'; t.style.color = '#ff0'; d.innerText = 'Руководство изучает ваши личные данные.'; }
+        if (status === 'verify') { t.innerText = 'ПОДТВЕРДИТЕ EMAIL'; t.style.color = '#fff'; d.innerText = 'Проверьте почту и подтвердите аккаунт.'; }
+        else if (status === 'pending') { t.innerText = 'ОЖИДАНИЕ'; t.style.color = '#fff'; d.innerText = 'Ваш рапорт на вступление находится в очереди.'; }
+        else if (status === 'review') { t.innerText = 'НА ПРОВЕРКЕ'; t.style.color = '#ff0'; d.innerText = 'Руководство изучает вашу анкету.'; }
     }
 
     function register() {
         const n = document.getElementById('r-name').value;
         const r = document.getElementById('r-rank').value;
         const p = document.getElementById('r-post').value;
-        const c = document.getElementById('r-call').value;
         const e = document.getElementById('r-email').value;
         const ps = document.getElementById('r-pass').value;
 
@@ -154,7 +154,7 @@
         auth.createUserWithEmailAndPassword(e, ps).then(res => {
             res.user.sendEmailVerification();
             db.collection('users').doc(res.user.uid).set({
-                name: n, rank: r, post: p, callsign: c, email: e, status: 'pending', role: 'user'
+                name: n, rank: r, post: p, email: e, status: 'pending', role: 'user'
             });
         }).catch(err => alert(err.message));
     }
@@ -169,8 +169,8 @@
                 list.innerHTML += `<div class="post card">
                     <div style="font-size:11px; color:#555; float:right;">${new Date(data.time).toLocaleString()}</div>
                     <div style="color:var(--blue); font-weight:bold; font-size:12px;">${data.authorRank}</div>
-                    <div style="color:#fff; margin-bottom:10px; font-weight: bold;">${data.authorName}</div>
-                    <div style="white-space:pre-wrap; color: #ccc;">${data.text}</div>
+                    <div style="color:#fff; margin-bottom:10px; font-weight:bold;">${data.authorName}</div>
+                    <div style="white-space:pre-wrap; color:#ccc;">${data.text}</div>
                 </div>`;
             });
         });
