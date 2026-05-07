@@ -14,34 +14,40 @@
         body { background: var(--bg); color: #ccc; font-family: 'Segoe UI', sans-serif; margin: 0; }
         
         header { 
-            width: 100%; height: 300px; 
+            width: 100%; height: 280px; 
             background: url('i.png') no-repeat center center; background-size: cover; 
             border-bottom: 2px solid var(--blue); box-shadow: 0 0 15px rgba(0, 123, 255, 0.4);
         }
 
-        .container { max-width: 1000px; margin: -30px auto 50px; padding: 0 20px; }
-        .card { background: var(--card); border: 1px solid #232a35; border-radius: 8px; padding: 25px; margin-bottom: 20px; }
+        .container { max-width: 800px; margin: -30px auto 50px; padding: 0 20px; }
+        .card { background: var(--card); border: 1px solid #232a35; border-radius: 8px; padding: 35px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
         
         .btn { 
             background: transparent; border: 1px solid var(--blue); color: var(--blue); 
-            padding: 8px 20px; cursor: pointer; text-transform: uppercase; font-weight: bold; border-radius: 4px; transition: 0.3s;
+            padding: 12px 30px; cursor: pointer; text-transform: uppercase; font-weight: bold; border-radius: 4px; transition: 0.3s; width: 100%; max-width: 300px;
         }
-        .btn:hover { background: var(--blue); color: #fff; }
-        .btn-admin { border-color: #ff4444; color: #ff4444; margin: 5px; }
+        .btn:hover { background: var(--blue); color: #fff; box-shadow: 0 0 15px var(--blue); }
+        .btn-text { background: none; border: none; color: #666; cursor: pointer; text-decoration: underline; margin-top: 15px; font-size: 14px; }
 
-        input { background: #000; border: 1px solid #333; color: #fff; padding: 10px; margin: 10px 0; width: 250px; border-radius: 4px; }
+        input { 
+            background: #000; border: 1px solid #333; color: #fff; padding: 12px; 
+            margin-bottom: 15px; width: 100%; max-width: 350px; border-radius: 4px; box-sizing: border-box;
+            outline: none; transition: 0.3s;
+        }
+        input:focus { border-color: var(--blue); box-shadow: 0 0 5px var(--blue); }
         
         /* СТАТУСЫ */
-        .status-box { font-size: 40px; font-weight: 900; text-transform: uppercase; letter-spacing: 5px; margin: 20px 0; }
+        .status-box { font-size: 45px; font-weight: 900; text-transform: uppercase; letter-spacing: 5px; margin: 30px 0; }
         .st-pending { color: #ffffff; text-shadow: 0 0 10px #fff; }
         .st-review { color: #ffff00; text-shadow: 0 0 10px #ffff00; }
         .st-approved { color: #00ff00; text-shadow: 0 0 10px #00ff00; }
         .st-rejected { color: #ff0000; text-shadow: 0 0 10px #ff0000; }
 
-        #auth-screen, #status-screen, #main-forum, #admin-panel { display: none; text-align: center; }
+        #auth-view, #reg-view, #status-view, #forum-view, #admin-view { display: none; text-align: center; }
         .active { display: block !important; }
 
-        .user-row { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #222; }
+        .forum-item { border-bottom: 1px solid #222; padding: 15px; display: flex; align-items: center; text-align: left; }
+        .forum-item:hover { background: #181d26; }
     </style>
 </head>
 <body>
@@ -49,40 +55,50 @@
 <header></header>
 
 <div class="container">
-    <!-- ВХОД -->
-    <div id="auth-screen" class="card active">
-        <h2>АВТОРИЗАЦИЯ ОСБ</h2>
-        <input type="email" id="email" placeholder="Email"><br>
-        <input type="password" id="password" placeholder="Пароль"><br>
-        <button class="btn" onclick="login()">Вход</button>
-        <button class="btn" onclick="register()">Регистрация</button>
+    <!-- СТРАНИЦА ВХОДА -->
+    <div id="auth-view" class="card active">
+        <h2 style="color: #fff; letter-spacing: 1px;">АВТОРИЗАЦИЯ ОСБ</h2>
+        <p style="margin-bottom: 30px; color: #666;">Введите учетные данные для доступа к форуму</p>
+        <input type="email" id="login-email" placeholder="Email"><br>
+        <input type="password" id="login-pass" placeholder="Пароль"><br>
+        <button class="btn" onclick="login()">Войти в систему</button><br>
+        <button class="btn-text" onclick="showView('reg-view')">Нет аккаунта? Подать рапорт на вступление</button>
     </div>
 
-    <!-- ЭКРАН СТАТУСА -->
-    <div id="status-screen" class="card">
-        <h2 id="status-title">ВАША ЗАЯВКА:</h2>
+    <!-- СТРАНИЦА РЕГИСТРАЦИИ (АНКЕТА) -->
+    <div id="reg-view" class="card">
+        <h2 style="color: #fff;">РАПОРТ НА ВСТУПЛЕНИЕ</h2>
+        <p style="margin-bottom: 30px; color: #666;">Заполните анкету для получения доступа</p>
+        <input type="text" id="reg-name" placeholder="ФИО"><br>
+        <input type="text" id="reg-callsign" placeholder="Позывной (если есть)"><br>
+        <input type="email" id="reg-email" placeholder="Email"><br>
+        <input type="password" id="reg-pass" placeholder="Придумайте пароль"><br>
+        <button class="btn" onclick="register()">Отправить рапорт</button><br>
+        <button class="btn-text" onclick="showView('auth-view')">Вернуться к авторизации</button>
+    </div>
+
+    <!-- СТРАНИЦА СТАТУСА -->
+    <div id="status-view" class="card">
+        <h2 style="color: #666; font-size: 18px;">СТАТУС ВАШЕГО РАПОРТА:</h2>
         <div id="status-text" class="status-box">ЗАГРУЗКА...</div>
-        <p id="status-desc" style="color: #666;"></p>
-        <button class="btn" onclick="logout()">Выход</button>
+        <p id="status-desc" style="color: #555; line-height: 1.6;"></p>
+        <button class="btn" onclick="logout()" style="margin-top: 20px;">Выйти из системы</button>
     </div>
 
     <!-- ГЛАВНЫЙ ФОРУМ -->
-    <div id="main-forum">
-        <div class="card" style="display: flex; justify-content: space-between; align-items: center;">
-            <h3 id="user-info">Сотрудник ОСБ</h3>
+    <div id="forum-view">
+        <div class="card" style="display: flex; justify-content: space-between; align-items: center; padding: 15px 25px;">
+            <h3 id="user-display" style="margin: 0; color: #fff;">Сотрудник ОСБ</h3>
             <div>
-                <button id="admin-btn" class="btn btn-admin" style="display:none;" onclick="showAdmin()">АДМИН-ПАНЕЛЬ</button>
-                <button class="btn" onclick="logout()">Выход</button>
+                <button id="admin-btn" class="btn" style="display:none; border-color: #f00; color: #f00; padding: 5px 15px; margin-right: 10px;" onclick="showAdmin()">АДМИНКА</button>
+                <button class="btn" onclick="logout()" style="padding: 5px 15px;">Выйти</button>
             </div>
         </div>
-        <div class="card"><h2>РАЗДЕЛЫ ФОРУМА В РАЗРАБОТКЕ</h2></div>
-    </div>
-
-    <!-- АДМИН ПАНЕЛЬ -->
-    <div id="admin-panel" class="card">
-        <h2 style="color: #ff4444;">ПРОВЕРКА ЗАЯВОК</h2>
-        <div id="users-list"></div>
-        <button class="btn" onclick="location.reload()" style="margin-top: 20px;">Назад</button>
+        <div class="card">
+            <h2 style="color: var(--blue); text-align: left; border-bottom: 1px solid var(--blue); padding-bottom: 10px;">БАЗА ДАННЫХ</h2>
+            <div class="forum-item">📜 <div><b style="color:#fff; display:block;">Канцелярия</b><span style="color:#555; font-size:13px;">Приказы, распоряжения и выговоры.</span></div></div>
+            <div class="forum-item">👮 <div><b style="color:#fff; display:block;">Личный состав</b><span style="color:#555; font-size:13px;">Рапорты на повышение и списки сотрудников.</span></div></div>
+        </div>
     </div>
 </div>
 
@@ -101,22 +117,21 @@
     const db = firebase.firestore();
 
     auth.onAuthStateChanged(user => {
-        if (user) checkUser(user);
-        else showPage('auth-screen');
+        if (user) checkStatus(user);
+        else showView('auth-view');
     });
 
-    function checkUser(user) {
+    function checkStatus(user) {
         db.collection('users').doc(user.uid).onSnapshot(doc => {
             if (!doc.exists) return;
             const data = doc.data();
-            
             if (data.status === 'approved') {
-                document.getElementById('user-info').innerText = data.name;
+                document.getElementById('user-display').innerText = `Сотрудник: ${data.name} [${data.callsign || 'БЕЗ ПОЗЫВНОГО'}]`;
                 if (data.role === 'admin') document.getElementById('admin-btn').style.display = 'inline-block';
-                showPage('main-forum');
+                showView('forum-view');
             } else {
                 updateStatusUI(data.status);
-                showPage('status-screen');
+                showView('status-view');
             }
         });
     }
@@ -125,58 +140,37 @@
         const s = document.getElementById('status-text');
         const d = document.getElementById('status-desc');
         s.className = 'status-box';
-        
-        if (status === 'pending') {
-            s.innerText = 'ОЖИДАНИЕ'; s.classList.add('st-pending');
-            d.innerText = 'Ваш рапорт находится в очереди на рассмотрение.';
-        } else if (status === 'review') {
-            s.innerText = 'НА ПРОВЕРКЕ'; s.classList.add('st-review');
-            d.innerText = 'Руководство батальона изучает ваши данные.';
-        } else if (status === 'rejected') {
-            s.innerText = 'ОТКАЗАНО'; s.classList.add('st-rejected');
-            d.innerText = 'Ваш рапорт был отклонен. Попробуйте позже.';
-        }
+        if (status === 'pending') { s.innerText = 'ОЖИДАНИЕ'; s.classList.add('st-pending'); d.innerText = 'Ваш рапорт успешно отправлен и ожидает очереди на рассмотрение.'; }
+        else if (status === 'review') { s.innerText = 'НА ПРОВЕРКЕ'; s.classList.add('st-review'); d.innerText = 'Майор Русаков или Капитан Солониченко приступили к проверке ваших данных.'; }
+        else if (status === 'rejected') { s.innerText = 'ОТКАЗАНО'; s.classList.add('st-rejected'); d.innerText = 'К сожалению, ваш рапорт на вступление был отклонен руководством.'; }
     }
 
-    function showAdmin() {
-        showPage('admin-panel');
-        db.collection('users').where('status', '!=', 'approved').get().then(snap => {
-            const list = document.getElementById('users-list');
-            list.innerHTML = '';
-            snap.forEach(doc => {
-                const u = doc.data();
-                list.innerHTML += `<div class="user-row">
-                    <span>${u.name} (${u.status})</span>
-                    <div>
-                        <button class="btn btn-admin" onclick="setStatus('${doc.id}', 'review')">Проверка</button>
-                        <button class="btn" style="border-color:#0f0;color:#0f0" onclick="setStatus('${doc.id}', 'approved')">Принять</button>
-                        <button class="btn btn-admin" onclick="setStatus('${doc.id}', 'rejected')">Отказ</button>
-                    </div>
-                </div>`;
-            });
-        });
-    }
-
-    function setStatus(uid, status) {
-        db.collection('users').doc(uid).update({ status: status }).then(() => showAdmin());
-    }
-
-    function showPage(id) {
-        document.querySelectorAll('.container > div').forEach(div => div.classList.remove('active'));
+    function showView(id) {
+        document.getElementById('auth-view').classList.remove('active');
+        document.getElementById('reg-view').classList.remove('active');
+        document.getElementById('status-view').classList.remove('active');
+        document.getElementById('forum-view').classList.remove('active');
         document.getElementById(id).classList.add('active');
     }
 
     function register() {
-        const name = prompt("Введите ФИО и Позывной:");
-        if (!name) return;
-        auth.createUserWithEmailAndPassword(email.value, password.value).then(res => {
+        const n = document.getElementById('reg-name').value;
+        const c = document.getElementById('reg-callsign').value;
+        const e = document.getElementById('reg-email').value;
+        const p = document.getElementById('reg-pass').value;
+        if (!n || !e || !p) return alert("Заполните обязательные поля!");
+
+        auth.createUserWithEmailAndPassword(e, p).then(res => {
             db.collection('users').doc(res.user.uid).set({
-                name: name, email: email.value, status: 'pending', role: 'user'
+                name: n, callsign: c, email: e, status: 'pending', role: 'user'
             });
-        });
+        }).catch(err => alert(err.message));
     }
-    function login() { auth.signInWithEmailAndPassword(email.value, password.value); }
-    function logout() { auth.signOut(); location.reload(); }
+
+    function login() {
+        auth.signInWithEmailAndPassword(document.getElementById('login-email').value, document.getElementById('login-pass').value).catch(err => alert("Ошибка входа!"));
+    }
+    function logout() { auth.signOut().then(() => location.reload()); }
 </script>
 </body>
 </html>
