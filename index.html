@@ -3,189 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KEMEROVO RP | ОСБ ДПС</title>
+    <title>ФОРУМ ОСБ ДПС — КУЗБАСС</title>
+    
+    <script src="https://gstatic.com"></script>
+    <script src="https://gstatic.com"></script>
+    <script src="https://gstatic.com"></script>
+
     <style>
-        body { background: #0a0a0a; color: #fff; font-family: sans-serif; margin: 0; padding: 0; }
-        .header { display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; border-bottom: 1px solid #222; }
-        .nav { display: flex; gap: 20px; }
-        .nav a, .nav button { color: #888; text-decoration: none; background: none; border: none; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 12px; }
-        .nav a:hover, .nav button:hover { color: #fff; }
+        :root { --blue: #007bff; --bg: #0a0c10; --card: #12161c; }
+        body { background: var(--bg); color: #ccc; font-family: 'Segoe UI', sans-serif; margin: 0; }
         
-        .btn-ds { background: #5865F2; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        header { 
+            width: 100%; height: 300px; 
+            background: url('i.png') no-repeat center center; background-size: cover; 
+            border-bottom: 2px solid var(--blue); box-shadow: 0 0 15px rgba(0, 123, 255, 0.4);
+        }
+
+        .container { max-width: 1000px; margin: -30px auto 50px; padding: 0 20px; }
+        .card { background: var(--card); border: 1px solid #232a35; border-radius: 8px; padding: 25px; margin-bottom: 20px; }
         
-        .wrapper { display: grid; grid-template-columns: 250px 1fr; gap: 30px; padding: 30px 5%; }
-        @media (max-width: 768px) { .wrapper { grid-template-columns: 1fr; } }
+        .btn { 
+            background: transparent; border: 1px solid var(--blue); color: var(--blue); 
+            padding: 8px 20px; cursor: pointer; text-transform: uppercase; font-weight: bold; border-radius: 4px; transition: 0.3s;
+        }
+        .btn:hover { background: var(--blue); color: #fff; }
+        .btn-admin { border-color: #ff4444; color: #ff4444; margin: 5px; }
+
+        input { background: #000; border: 1px solid #333; color: #fff; padding: 10px; margin: 10px 0; width: 250px; border-radius: 4px; }
         
-        .sidebar { background: #111; border: 1px solid #222; border-radius: 10px; padding: 20px; height: fit-content; }
-        .side-btn { width: 100%; text-align: left; padding: 12px; background: #1a1a1a; border: 1px solid #333; color: #888; border-radius: 8px; margin-bottom: 10px; cursor: pointer; font-weight: bold; }
-        .side-btn.active { background: #3b82f6; color: #fff; border-color: #3b82f6; }
-        
-        .card { background: #111; border: 1px solid #222; border-radius: 10px; padding: 25px; margin-bottom: 20px; }
-        .card h2 { color: #3b82f6; text-transform: uppercase; font-style: italic; margin-top: 0; }
-        
-        .hidden { display: none !important; }
-        
-        input, textarea, select { width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 5px; margin-bottom: 10px; box-sizing: border-box; }
-        .btn-blue { background: #3b82f6; color: #fff; border: none; padding: 12px; border-radius: 5px; width: 100%; cursor: pointer; font-weight: bold; text-transform: uppercase; }
+        /* СТАТУСЫ */
+        .status-box { font-size: 40px; font-weight: 900; text-transform: uppercase; letter-spacing: 5px; margin: 20px 0; }
+        .st-pending { color: #ffffff; text-shadow: 0 0 10px #fff; }
+        .st-review { color: #ffff00; text-shadow: 0 0 10px #ffff00; }
+        .st-approved { color: #00ff00; text-shadow: 0 0 10px #00ff00; }
+        .st-rejected { color: #ff0000; text-shadow: 0 0 10px #ff0000; }
+
+        #auth-screen, #status-screen, #main-forum, #admin-panel { display: none; text-align: center; }
+        .active { display: block !important; }
+
+        .user-row { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #222; }
     </style>
 </head>
 <body>
 
-    <header class="header">
-        <div style="display: flex; align-items: center; gap: 30px;">
-            <div style="font-size: 24px; font-weight: 900; italic; text-transform: uppercase;">Форум</div>
-            <div class="nav">
-                <button onclick="showTab('news')" style="color:#fff">Новости</button>
-                <a href="https://github.io">Основной сайт</a>
-            </div>
-        </div>
-        <div id="authBox">
-            <button onclick="login()" class="btn-ds"><img src="images.jpg" style="width:20px; border-radius:3px;"> Войти</button>
-        </div>
-    </header>
+<header></header>
 
-    <div class="wrapper">
-        <aside>
-            <div class="sidebar">
-                <div style="font-size: 10px; color: #3b82f6; font-weight: bold; margin-bottom: 15px; letter-spacing: 2px;">KEMEROVO ROLEPLAY</div>
-                <button onclick="showTab('news')" id="b-news" class="side-btn active">НОВОСТИ</button>
-                <button onclick="protectedTab()" id="b-forum" class="side-btn">БАЗА МВД / ОСБ</button>
-            </div>
-        </aside>
-
-        <main>
-            <div id="tab-news">
-                <div class="card">
-                    <h2>Инфо-блок</h2>
-                    <p>Добро пожаловать. Для доступа к закрытым рапортам и анкетам авторизуйтесь через Discord.</p>
-                </div>
-            </div>
-
-            <div id="tab-forum" class="hidden">
-                <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <h2 style="margin:0">Архив ГУ МВД</h2>
-                    <button onclick="document.getElementById('m-post').classList.remove('hidden')" class="btn-blue" style="width:auto; padding: 8px 20px;">Подать рапорт</button>
-                </div>
-                <div id="feed"><p style="color:#444; text-align:center">Загрузка данных...</p></div>
-            </div>
-        </main>
+<div class="container">
+    <!-- ВХОД -->
+    <div id="auth-screen" class="card active">
+        <h2>АВТОРИЗАЦИЯ ОСБ</h2>
+        <input type="email" id="email" placeholder="Email"><br>
+        <input type="password" id="password" placeholder="Пароль"><br>
+        <button class="btn" onclick="login()">Вход</button>
+        <button class="btn" onclick="register()">Регистрация</button>
     </div>
 
-    <!-- Модалка регистрации -->
-    <div id="m-reg" class="hidden" style="position:fixed; inset:0; background:rgba(0,0,0,0.95); display:flex; align-items:center; justify-content:center; z-index:1000;">
-        <div class="sidebar" style="width:400px;">
-            <h2 style="color:#3b82f6">ЛИЧНОЕ ДЕЛО</h2>
-            <form id="f-reg">
-                <input type="text" id="i-fio" placeholder="ФИО (RP)" required>
-                <input type="text" id="i-rank" placeholder="Звание" required>
-                <input type="text" id="i-post" placeholder="Должность" required>
-                <textarea id="i-bio" placeholder="Автобиография..." style="height:100px" required></textarea>
-                <button type="submit" class="btn-blue">Зарегистрировать</button>
-            </form>
-        </div>
+    <!-- ЭКРАН СТАТУСА -->
+    <div id="status-screen" class="card">
+        <h2 id="status-title">ВАША ЗАЯВКА:</h2>
+        <div id="status-text" class="status-box">ЗАГРУЗКА...</div>
+        <p id="status-desc" style="color: #666;"></p>
+        <button class="btn" onclick="logout()">Выход</button>
     </div>
 
-    <!-- Модалка рапорта -->
-    <div id="m-post" class="hidden" style="position:fixed; inset:0; background:rgba(0,0,0,0.9); display:flex; align-items:center; justify-content:center; z-index:1000;">
-        <div class="sidebar" style="width:400px; position:relative;">
-            <button onclick="document.getElementById('m-post').classList.add('hidden')" style="position:absolute; right:15px; top:15px; color:#fff; background:none; border:none; cursor:pointer;">✕</button>
-            <h2 style="color:#3b82f6">НОВЫЙ РАПОРТ</h2>
-            <select id="i-type">
-                <option>Заявление на удостоверение</option>
-                <option>Отчет на повышение</option>
-            </select>
-            <textarea id="i-text" placeholder="Суть..." style="height:100px"></textarea>
-            <button onclick="send()" class="btn-blue">Отправить</button>
+    <!-- ГЛАВНЫЙ ФОРУМ -->
+    <div id="main-forum">
+        <div class="card" style="display: flex; justify-content: space-between; align-items: center;">
+            <h3 id="user-info">Сотрудник ОСБ</h3>
+            <div>
+                <button id="admin-btn" class="btn btn-admin" style="display:none;" onclick="showAdmin()">АДМИН-ПАНЕЛЬ</button>
+                <button class="btn" onclick="logout()">Выход</button>
+            </div>
         </div>
+        <div class="card"><h2>РАЗДЕЛЫ ФОРУМА В РАЗРАБОТКЕ</h2></div>
     </div>
 
-    <script src="https://gstatic.com"></script>
-    <script src="https://gstatic.com"></script>
-    <script src="https://gstatic.com"></script>
+    <!-- АДМИН ПАНЕЛЬ -->
+    <div id="admin-panel" class="card">
+        <h2 style="color: #ff4444;">ПРОВЕРКА ЗАЯВОК</h2>
+        <div id="users-list"></div>
+        <button class="btn" onclick="location.reload()" style="margin-top: 20px;">Назад</button>
+    </div>
+</div>
 
-    <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyDcYntF4I5E9fBRt7a-REdIg21aaqC8cok",
-            authDomain: "://firebaseapp.com",
-            projectId: "osb-dps-forum-f2ba4",
-            storageBucket: "osb-dps-forum-f2ba4.firebasestorage.app",
-            messagingSenderId: "1005524809806",
-            appId: "1:1005524809806:web:a2cac8c32decb55dc66b1f"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        const auth = firebase.auth();
-        let userProfile = null;
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyAwTtQdXUORxEMwxYb5-6UQxD0ilYOaevg",
+        authDomain: "://firebaseapp.com",
+        projectId: "osbforum",
+        storageBucket: "osbforum.firebasestorage.app",
+        messagingSenderId: "126019468718",
+        appId: "1:126019468718:web:8a729fc6d5df476f7d1c3f"
+    };
 
-        async function login() {
-            const provider = new firebase.auth.OAuthProvider('oidc.discord');
-            await auth.signInWithPopup(provider).catch(e => alert("Ошибка: " + e.message));
-        }
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
 
-        auth.onAuthStateChanged(async (user) => {
-            if (user) {
-                document.getElementById('authBox').innerHTML = `<div style="display:flex; align-items:center; gap:10px;"><img src="${user.photoURL}" style="width:30px; border-radius:50%; border:1px solid #3b82f6;"> ${user.displayName}</div>`;
-                const doc = await db.collection('users').doc(user.uid).get();
-                if (!doc.exists) { document.getElementById('m-reg').classList.remove('hidden'); }
-                else { userProfile = doc.data(); }
+    auth.onAuthStateChanged(user => {
+        if (user) checkUser(user);
+        else showPage('auth-screen');
+    });
+
+    function checkUser(user) {
+        db.collection('users').doc(user.uid).onSnapshot(doc => {
+            if (!doc.exists) return;
+            const data = doc.data();
+            
+            if (data.status === 'approved') {
+                document.getElementById('user-info').innerText = data.name;
+                if (data.role === 'admin') document.getElementById('admin-btn').style.display = 'inline-block';
+                showPage('main-forum');
+            } else {
+                updateStatusUI(data.status);
+                showPage('status-screen');
             }
         });
+    }
 
-        function showTab(t) {
-            document.getElementById('tab-news').classList.add('hidden');
-            document.getElementById('tab-forum').classList.add('hidden');
-            document.getElementById('b-news').classList.remove('active');
-            document.getElementById('b-forum').classList.remove('active');
-            document.getElementById('tab-'+t).classList.remove('hidden');
-            document.getElementById('b-'+t).classList.add('active');
-            if(t === 'forum') load();
+    function updateStatusUI(status) {
+        const s = document.getElementById('status-text');
+        const d = document.getElementById('status-desc');
+        s.className = 'status-box';
+        
+        if (status === 'pending') {
+            s.innerText = 'ОЖИДАНИЕ'; s.classList.add('st-pending');
+            d.innerText = 'Ваш рапорт находится в очереди на рассмотрение.';
+        } else if (status === 'review') {
+            s.innerText = 'НА ПРОВЕРКЕ'; s.classList.add('st-review');
+            d.innerText = 'Руководство батальона изучает ваши данные.';
+        } else if (status === 'rejected') {
+            s.innerText = 'ОТКАЗАНО'; s.classList.add('st-rejected');
+            d.innerText = 'Ваш рапорт был отклонен. Попробуйте позже.';
         }
+    }
 
-        function protectedTab() {
-            if(!auth.currentUser) alert("Сначала войдите в Discord!");
-            else showTab('forum');
-        }
-
-        document.getElementById('f-reg').onsubmit = async (e) => {
-            e.preventDefault();
-            await db.collection('users').doc(auth.currentUser.uid).set({
-                fio: document.getElementById('i-fio').value,
-                rank: document.getElementById('i-rank').value,
-                post: document.getElementById('i-post').value,
-                bio: document.getElementById('i-bio').value
+    function showAdmin() {
+        showPage('admin-panel');
+        db.collection('users').where('status', '!=', 'approved').get().then(snap => {
+            const list = document.getElementById('users-list');
+            list.innerHTML = '';
+            snap.forEach(doc => {
+                const u = doc.data();
+                list.innerHTML += `<div class="user-row">
+                    <span>${u.name} (${u.status})</span>
+                    <div>
+                        <button class="btn btn-admin" onclick="setStatus('${doc.id}', 'review')">Проверка</button>
+                        <button class="btn" style="border-color:#0f0;color:#0f0" onclick="setStatus('${doc.id}', 'approved')">Принять</button>
+                        <button class="btn btn-admin" onclick="setStatus('${doc.id}', 'rejected')">Отказ</button>
+                    </div>
+                </div>`;
             });
-            location.reload();
-        };
+        });
+    }
 
-        async function send() {
-            await db.collection('applications').add({
-                author: userProfile.fio, rank: userProfile.rank,
-                text: document.getElementById('i-text').value,
-                type: document.getElementById('i-type').value,
-                status: 'waiting', date: new Date().toLocaleString(),
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            });
-            document.getElementById('m-post').classList.add('hidden');
-        }
+    function setStatus(uid, status) {
+        db.collection('users').doc(uid).update({ status: status }).then(() => showAdmin());
+    }
 
-        function load() {
-            db.collection('applications').orderBy('timestamp', 'desc').onSnapshot(snap => {
-                const feed = document.getElementById('feed');
-                feed.innerHTML = '';
-                snap.forEach(doc => {
-                    const d = doc.data();
-                    feed.innerHTML += `
-                        <div class="card" style="border-left:4px solid ${d.status === 'waiting' ? '#facc15' : '#22c55e'}">
-                            <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:10px;">
-                                <span style="color:#3b82f6; font-weight:bold;">${d.author} [${d.rank}]</span>
-                                <span style="color:#444">${d.date}</span>
-                            </div>
-                            <div style="font-size:10px; font-weight:bold; color:#3b82f6; text-transform:uppercase;">${d.type}</div>
-                            <p style="font-style:italic; color:#888; margin-top:10px;">"${d.text}"</p>
-                        </div>`;
-                });
+    function showPage(id) {
+        document.querySelectorAll('.container > div').forEach(div => div.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+
+    function register() {
+        const name = prompt("Введите ФИО и Позывной:");
+        if (!name) return;
+        auth.createUserWithEmailAndPassword(email.value, password.value).then(res => {
+            db.collection('users').doc(res.user.uid).set({
+                name: name, email: email.value, status: 'pending', role: 'user'
             });
-        }
-    </script>
+        });
+    }
+    function login() { auth.signInWithEmailAndPassword(email.value, password.value); }
+    function logout() { auth.signOut(); location.reload(); }
+</script>
 </body>
 </html>
