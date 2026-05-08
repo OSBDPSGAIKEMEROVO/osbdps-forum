@@ -11,14 +11,13 @@
 
     <style>
         :root { --blue: #007bff; --bg: #0a0c10; --card: #12161c; --glow: 0 0 15px rgba(0, 123, 255, 0.4); }
-        
         body { background: var(--bg); color: #ccc; font-family: 'Segoe UI', sans-serif; margin: 0; overflow-x: hidden; }
         
-        /* ИСПРАВЛЕННАЯ ШАПКА */
+        /* ШАПКА КАК ТЫ ХОТЕЛ */
         header { 
             width: 100%; 
             height: 450px; 
-            background: linear-gradient(to bottom, rgba(10, 12, 16, 0) 60%, var(--bg) 100%), 
+            background: linear-gradient(to bottom, rgba(10, 12, 16, 0) 50%, var(--bg) 100%), 
                         url('i.png') no-repeat center center; 
             background-size: cover; 
             border-bottom: 2px solid var(--blue); 
@@ -26,22 +25,24 @@
         }
 
         .container { max-width: 900px; margin: -100px auto 50px; position: relative; z-index: 10; padding: 0 20px; }
+        .card { background: var(--card); border: 1px solid #232a35; border-radius: 8px; padding: 35px; margin-bottom: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); text-align: center; }
         
-        .card { background: var(--card); border: 1px solid #232a35; border-radius: 8px; padding: 35px; margin-bottom: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
-        
-        .btn { background: transparent; border: 1px solid var(--blue); color: var(--blue); padding: 10px 20px; cursor: pointer; text-transform: uppercase; font-weight: bold; border-radius: 4px; transition: 0.3s; }
+        .btn { background: transparent; border: 1px solid var(--blue); color: var(--blue); padding: 10px 25px; cursor: pointer; text-transform: uppercase; font-weight: bold; border-radius: 4px; transition: 0.3s; }
         .btn:hover { background: var(--blue); color: #fff; box-shadow: var(--glow); }
         
-        input, textarea { background: #000; border: 1px solid #222; color: #fff; padding: 12px; margin-bottom: 12px; width: 100%; border-radius: 4px; box-sizing: border-box; font-family: inherit; transition: 0.3s; }
-        input:focus { border-color: var(--blue); outline: none; }
+        input, textarea { background: #000; border: 1px solid #222; color: #fff; padding: 12px; margin-bottom: 12px; width: 100%; border-radius: 4px; box-sizing: border-box; font-family: inherit; }
         
-        .status-box { font-size: 35px; font-weight: 900; text-transform: uppercase; margin: 20px 0; letter-spacing: 3px; }
-        .post { background: #1a1f26; border-left: 4px solid var(--blue); padding: 15px; margin-bottom: 15px; border-radius: 0 4px 4px 0; text-align: left; }
-        
-        #auth-v, #reg-view, #status-v, #main-v, #raports-v { display: none; text-align: center; }
+        .status-box { font-size: 40px; font-weight: 900; text-transform: uppercase; margin: 25px 0; letter-spacing: 4px; }
+        .st-pending { color: #fff; text-shadow: 0 0 10px #fff; }
+        .st-review { color: #ffff00; text-shadow: 0 0 10px #ffff00; }
+        .st-approved { color: #00ff00; text-shadow: 0 0 10px #00ff00; }
+        .st-rejected { color: #ff0000; text-shadow: 0 0 10px #ff0000; }
+
+        #auth-v, #reg-v, #status-v, #main-v, #raports-v { display: none; }
         .active { display: block !important; }
-        .forum-link { border-bottom: 1px solid #222; padding: 18px; display: flex; align-items: center; text-align: left; cursor: pointer; transition: 0.2s; }
-        .forum-link:hover { background: #181d26; border-left: 4px solid var(--blue); }
+        
+        .forum-link { border-bottom: 1px solid #222; padding: 18px; display: flex; align-items: center; text-align: left; cursor: pointer; }
+        .forum-link:hover { background: #181d26; border-left: 3px solid var(--blue); }
     </style>
 </head>
 <body>
@@ -49,64 +50,58 @@
 <header></header>
 
 <div class="container">
-    <!-- 1. ВХОД (ИСПРАВЛЕН ЗАГОЛОВОК) -->
+    <!-- ВХОД -->
     <div id="auth-v" class="card active">
-        <h2 style="color: #fff; text-transform: uppercase; letter-spacing: 2px;">АВТОРИЗАЦИЯ</h2>
-        <div style="margin: 25px 0;">
-            <input type="email" id="email" placeholder="Электронная почта">
-            <input type="password" id="pass" placeholder="Пароль">
-        </div>
-        <button class="btn" onclick="login()">Войти в систему</button>
-        <button class="btn" style="border:none; text-decoration: underline; font-size: 13px;" onclick="showPage('reg-view')">Подать рапорт на вступление</button>
+        <h2 style="color: #fff; letter-spacing: 2px;">АВТОРИЗАЦИЯ</h2>
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="pass" placeholder="Пароль">
+        <br><br>
+        <button class="btn" onclick="login()">Войти</button>
+        <button class="btn" style="border:none; text-decoration: underline; font-size: 13px;" onclick="showPage('reg-v')">Подать рапорт на вступление</button>
     </div>
 
-    <!-- 2. РЕГИСТРАЦИЯ -->
-    <div id="reg-view" class="card">
-        <h2 style="color: #fff; text-transform: uppercase;">АНКЕТА СОТРУДНИКА</h2>
-        <p style="color: #555; font-size: 14px; margin-bottom: 20px;">Все поля обязательны к заполнению</p>
+    <!-- РЕГИСТРАЦИЯ -->
+    <div id="reg-v" class="card">
+        <h2 style="color: #fff;">АНКЕТА</h2>
         <input type="text" id="r-name" placeholder="ФИО (Пример: Иванов Иван Иванович)">
         <input type="text" id="r-rank" placeholder="Звание (Пример: Рядовой)">
         <input type="text" id="r-post" placeholder="Должность (Пример: Инспектор)">
-        <div style="border-top: 1px solid #222; margin: 15px 0; padding-top: 15px;"></div>
         <input type="email" id="r-email" placeholder="Email для входа">
         <input type="password" id="r-pass" placeholder="Пароль">
-        <button class="btn" onclick="register()">Отправить на проверку</button>
+        <button class="btn" onclick="register()">Отправить</button>
         <button class="btn" style="border:none;" onclick="showPage('auth-v')">Назад</button>
     </div>
 
-    <!-- 3. СТАТУС -->
+    <!-- СТАТУС -->
     <div id="status-v" class="card">
-        <h2 id="st-title">СТАТУС ДОСТУПА</h2>
+        <h2 style="color: #666;">СТАТУС ДОСТУПА:</h2>
         <div id="st-text" class="status-box"></div>
-        <p id="st-desc" style="color: #666;"></p>
-        <button class="btn" onclick="logout()">Выход</button>
+        <p id="st-desc" style="color: #555;"></p>
+        <button class="btn" onclick="logout()">Выйти</button>
     </div>
 
-    <!-- 4. ГЛАВНЫЙ ФОРУМ -->
+    <!-- ФОРУМ -->
     <div id="main-v">
         <div class="card" style="display: flex; justify-content: space-between; align-items: center; padding: 20px 30px;">
             <div style="text-align: left;">
-                <div id="u-info" style="color: var(--blue); font-size: 11px; font-weight: bold; text-transform: uppercase;"></div>
-                <h3 id="u-display" style="margin:0; color:#fff; font-size: 20px;"></h3>
+                <div id="u-info" style="color: var(--blue); font-size: 11px; font-weight: bold;"></div>
+                <h3 id="u-display" style="margin:0; color:#fff;"></h3>
             </div>
             <button class="btn" onclick="logout()">Выход</button>
         </div>
         <div class="card" style="padding: 0; overflow: hidden;">
-            <div style="background: #1a1f26; padding: 15px 20px; color: var(--blue); font-weight: bold; border-bottom: 1px solid var(--blue);">БАЗА ДАННЫХ БАТАЛЬОНА</div>
-            <div class="forum-link" onclick="openRaports()">📈 <div><b style="color:#fff; display:block;">Рапорты на повышение</b><span style="color:#555; font-size:12px;">Подача и просмотр отчетов о работе.</span></div></div>
-            <div class="forum-link">📜 <div><b style="color:#fff; display:block;">Канцелярия</b><span style="color:#555; font-size:12px;">Официальные приказы и распоряжения руководства.</span></div></div>
+            <div class="forum-link" onclick="openRaports()">📈 <div><b style="color:#fff; display:block;">Рапорты на повышение</b><span style="color:#555; font-size:12px;">Отчеты личного состава.</span></div></div>
+            <div class="forum-link">📜 <div><b style="color:#fff; display:block;">Канцелярия</b><span style="color:#555; font-size:12px;">Приказы руководства.</span></div></div>
         </div>
     </div>
 
-    <!-- 5. РАЗДЕЛ РАПОРТОВ -->
+    <!-- РАПОРТЫ -->
     <div id="raports-v">
         <div class="card">
             <button class="btn" onclick="showPage('main-v')" style="float:left; padding:5px 10px;">←</button>
-            <h2 style="color: #fff; text-transform: uppercase;">РАПОРТЫ НА ПОВЫШЕНИЕ</h2>
-            <div style="margin-top: 25px; border-top: 1px solid #222; padding-top: 25px;">
-                <textarea id="rep-txt" rows="4" placeholder="Опишите проделанную работу..."></textarea>
-                <button class="btn" onclick="sendRep()">Опубликовать рапорт</button>
-            </div>
+            <h2 style="color: #fff;">РАПОРТЫ</h2>
+            <textarea id="rep-txt" rows="4" style="margin-top:20px;" placeholder="Суть рапорта..."></textarea>
+            <button class="btn" onclick="sendRep()">Отправить</button>
         </div>
         <div id="reps-list"></div>
     </div>
@@ -129,19 +124,16 @@
 
     auth.onAuthStateChanged(user => {
         if (user) {
-            if (!user.emailVerified) { updateUI('verify'); showPage('status-v'); }
-            else {
-                db.collection('users').doc(user.uid).onSnapshot(doc => {
-                    if (doc.exists) {
-                        userData = doc.data();
-                        if (userData.status === 'approved') {
-                            document.getElementById('u-info').innerText = `${userData.rank} | ${userData.post}`;
-                            document.getElementById('u-display').innerText = userData.name;
-                            showPage('main-v');
-                        } else { updateUI(userData.status); showPage('status-v'); }
-                    }
-                });
-            }
+            db.collection('users').doc(user.uid).onSnapshot(doc => {
+                if (doc.exists) {
+                    userData = doc.data();
+                    if (userData.status === 'approved') {
+                        document.getElementById('u-info').innerText = `${userData.rank} | ${userData.post}`;
+                        document.getElementById('u-display').innerText = userData.name;
+                        showPage('main-v');
+                    } else { updateUI(userData.status); showPage('status-v'); }
+                }
+            });
         } else { showPage('auth-v'); }
     });
 
@@ -149,40 +141,32 @@
         const t = document.getElementById('st-text');
         const d = document.getElementById('st-desc');
         t.className = 'status-box';
-        if (status === 'verify') { t.innerText = 'ПОДТВЕРДИТЕ EMAIL'; t.style.color = '#fff'; d.innerText = 'Проверьте почтовый ящик и перейдите по ссылке.'; }
-        else if (status === 'pending') { t.innerText = 'ОЖИДАНИЕ'; t.style.color = '#fff'; d.innerText = 'Ваш рапорт принят и ожидает рассмотрения руководством.'; }
-        else if (status === 'review') { t.innerText = 'НА ПРОВЕРКЕ'; t.style.color = '#ff0'; d.innerText = 'Майор Русаков приступил к изучению вашей анкеты.'; }
+        if (status === 'pending') { t.innerText = 'ОЖИДАНИЕ'; t.classList.add('st-pending'); d.innerText = 'Ваш рапорт в очереди.'; }
+        else if (status === 'review') { t.innerText = 'НА ПРОВЕРКЕ'; t.classList.add('st-review'); d.innerText = 'Руководство изучает анкету.'; }
+        else if (status === 'rejected') { t.innerText = 'ОТКАЗАНО'; t.classList.add('st-rejected'); d.innerText = 'Рапорт отклонен.'; }
     }
 
     function register() {
-        const n = document.getElementById('r-name').value;
-        const r = document.getElementById('r-rank').value;
-        const p = document.getElementById('r-post').value;
-        const e = document.getElementById('r-email').value;
-        const ps = document.getElementById('r-pass').value;
-
-        if(!n || !r || !p || !e || !ps) return alert("Ошибка: Заполните все поля!");
-
+        const n = document.getElementById('r-name').value, r = document.getElementById('r-rank').value, 
+              p = document.getElementById('r-post').value, e = document.getElementById('r-email').value, 
+              ps = document.getElementById('r-pass').value;
+        if(!n || !r || !p || !e || !ps) return alert("Заполните всё!");
         auth.createUserWithEmailAndPassword(e, ps).then(res => {
-            res.user.sendEmailVerification();
-            db.collection('users').doc(res.user.uid).set({
-                name: n, rank: r, post: p, email: e, status: 'pending', role: 'user'
-            });
-        }).catch(err => alert("Ошибка регистрации: " + err.message));
+            db.collection('users').doc(res.user.uid).set({ name: n, rank: r, post: p, email: e, status: 'pending' });
+        }).catch(err => alert(err.message));
     }
 
     function openRaports() {
         showPage('raports-v');
         db.collection('reports').orderBy('time', 'desc').onSnapshot(snap => {
-            const list = document.getElementById('reps-list');
-            list.innerHTML = '';
+            const list = document.getElementById('reps-list'); list.innerHTML = '';
             snap.forEach(doc => {
                 const data = doc.data();
                 list.innerHTML += `<div class="post card">
                     <div style="font-size:11px; color:#555; float:right;">${new Date(data.time).toLocaleString()}</div>
-                    <div style="color:var(--blue); font-weight:bold; font-size:12px; text-transform: uppercase;">${data.authorRank}</div>
-                    <div style="color:#fff; margin-bottom:12px; font-weight:bold; font-size: 18px;">${data.authorName}</div>
-                    <div style="white-space:pre-wrap; color:#bbb; line-height: 1.5;">${data.text}</div>
+                    <div style="color:var(--blue); font-weight:bold; font-size:12px;">${data.authorRank}</div>
+                    <div style="color:#fff; margin-bottom:10px; font-weight:bold;">${data.authorName}</div>
+                    <div style="white-space:pre-wrap; color:#bbb;">${data.text}</div>
                 </div>`;
             });
         });
@@ -191,16 +175,15 @@
     function sendRep() {
         const val = document.getElementById('rep-txt').value;
         if (!val) return;
-        db.collection('reports').add({
-            text: val, authorName: userData.name, authorRank: userData.rank, time: Date.now()
-        }).then(() => { document.getElementById('rep-txt').value = ''; alert("Рапорт опубликован на портале!"); });
+        db.collection('reports').add({ text: val, authorName: userData.name, authorRank: userData.rank, time: Date.now() })
+        .then(() => { document.getElementById('rep-txt').value = ''; });
     }
 
     function showPage(id) {
         document.querySelectorAll('.container > div').forEach(v => v.classList.remove('active'));
         document.getElementById(id).classList.add('active');
     }
-    function login() { auth.signInWithEmailAndPassword(document.getElementById('email').value, document.getElementById('pass').value).catch(err => alert("Доступ запрещен: проверьте данные!")); }
+    function login() { auth.signInWithEmailAndPassword(document.getElementById('email').value, document.getElementById('pass').value); }
     function logout() { auth.signOut().then(() => location.reload()); }
 </script>
 </body>
